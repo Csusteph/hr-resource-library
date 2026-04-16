@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HR Resource Library — Reyes Coca-Cola Bottling</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f2f1ee; color: #1a1a1a; min-height: 100vh; }
+
+    .hero { background: #E61932; padding: 2.5rem 2rem 2rem; position: relative; overflow: hidden; }
+    .bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.06); }
+    .b1 { width: 300px; height: 300px; top: -100px; right: -60px; }
+    .b2 { width: 180px; height: 180px; bottom: -70px; right: 160px; }
+    .b3 { width: 100px; height: 100px; top: 20px; right: 260px; }
+    .hero-inner { max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
+    .brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; }
+    .brand-badge { width: 38px; height: 38px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; color: #E61932; flex-shrink: 0; }
+    .brand-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88); letter-spacing: 0.3px; }
+    .hero h1 { font-size: 28px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 8px; }
+    .hero-sub { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 460px; line-height: 1.6; margin-bottom: 1.5rem; }
+    .stat-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .stat-pill { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; padding: 5px 14px; font-size: 12.5px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .stat-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.7); }
+
+    .controls-wrap { max-width: 980px; margin: 0 auto; padding: 1.5rem 2rem 0; }
+    .search-row { display: flex; gap: 10px; margin-bottom: 1.1rem; }
+    .search-box { flex: 1; position: relative; }
+    .search-box input { width: 100%; padding: 11px 16px 11px 42px; border-radius: 999px; border: 1.5px solid #ddd; background: #fff; font-size: 14px; font-family: inherit; color: #1a1a1a; outline: none; transition: border-color 0.15s; }
+    .search-box input:focus { border-color: #E61932; }
+    .search-box svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: #aaa; pointer-events: none; }
+    .view-toggle { display: flex; border: 1.5px solid #ddd; border-radius: 999px; overflow: hidden; background: #fff; }
+    .vbtn { padding: 0 14px; border: none; background: transparent; cursor: pointer; font-size: 14px; color: #888; transition: all 0.14s; font-family: inherit; }
+    .vbtn.active { background: #E61932; color: #fff; }
+
+    .topic-bar { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 0.4rem; }
+    .chip { padding: 6px 16px; border-radius: 999px; border: 1.5px solid #ddd; background: #fff; color: #666; font-size: 12.5px; font-weight: 500; cursor: pointer; transition: all 0.13s; font-family: inherit; }
+    .chip:hover { border-color: #E61932; color: #E61932; }
+    .chip.active { background: #E61932; border-color: #E61932; color: #fff; }
+
+    .main { max-width: 980px; margin: 0 auto; padding: 1.25rem 2rem 3rem; }
+    .meta-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .count-line { font-size: 12.5px; color: #999; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+
+    .flip-wrap { perspective: 900px; height: 230px; cursor: pointer; }
+    .flip-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.45, 0.05, 0.25, 1); }
+    .flip-wrap.flipped .flip-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 14px; overflow: hidden; }
+
+    .flip-front { background: #fff; border: 1.5px solid #e8e8e4; display: flex; flex-direction: column; padding: 1.25rem; transition: border-color 0.13s, box-shadow 0.13s; }
+    .flip-wrap:hover .flip-front { border-color: #E61932; box-shadow: 0 8px 28px rgba(230,25,50,0.12); }
+    .flip-wrap.coming-soon:hover .flip-front { border-color: #f0a500; box-shadow: 0 8px 28px rgba(240,165,0,0.10); }
+
+    .front-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 6px; }
+    .book-icon-wrap { width: 48px; height: 56px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .front-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.4px; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+    .front-title { font-size: 14px; font-weight: 700; color: #1a1a1a; line-height: 1.35; margin-bottom: 6px; flex: 1; }
+    .front-desc { font-size: 11.5px; color: #888; line-height: 1.5; flex: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .flip-hint { margin-top: auto; padding-top: 8px; font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 4px; }
+
+    .coming-soon-badge { display: inline-flex; align-items: center; gap: 5px; background: #FFF8E6; color: #9A6200; border: 1px solid #F5D680; border-radius: 999px; font-size: 10.5px; font-weight: 700; padding: 3px 10px; margin-top: auto; width: fit-content; }
+    .cs-dot { width: 6px; height: 6px; border-radius: 50%; background: #f0a500; animation: pulse 1.6s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .flip-back { transform: rotateY(180deg); display: flex; flex-direction: column; padding: 1.25rem; }
+    .flip-back.live-back { background: #E61932; }
+    .flip-back.soon-back { background: #7a5200; }
+    .back-label { font-size: 10px; font-weight: 700; letter-spacing: 1.2px; color: rgba(255,255,255,0.6); text-transform: uppercase; margin-bottom: 6px; }
+    .back-title { font-size: 15px; font-weight: 800; color: #fff; line-height: 1.3; margin-bottom: 8px; }
+    .back-desc { font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.6; flex: 1; }
+    .back-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .btn-open { flex: 1; padding: 9px 0; border-radius: 999px; background: #fff; font-size: 12.5px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; transition: background 0.12s; }
+    .btn-open.red-btn { color: #E61932; }
+    .btn-open.red-btn:hover { background: #ffe0e4; }
+    .btn-open.amber-btn { color: #7a5200; }
+    .btn-open.amber-btn:hover { background: #fff3cc; }
+    .btn-back { padding: 9px 14px; border-radius: 999px; background: rgba(255,255,255,0.15); color: #fff; font-size: 12px; font-weight: 600; border: 1.5px solid rgba(255,255,255,0.3); cursor: pointer; font-family: inherit; transition: background 0.12s; }
+    .btn-back:hover { background: rgba(255,255,255,0.25); }
+
+    .rolodex { display: flex; flex-direction: column; }
+    .rolo-item { background: #fff; border: 1.5px solid #e8e8e4; border-radius: 0; margin-bottom: -1px; display: flex; align-items: center; gap: 14px; padding: 0.95rem 1.2rem; cursor: pointer; transition: background 0.12s, border-color 0.12s; position: relative; z-index: 0; }
+    .rolo-item:first-child { border-radius: 14px 14px 0 0; }
+    .rolo-item:last-of-type { border-radius: 0 0 14px 14px; margin-bottom: 0; }
+    .rolo-item:hover { background: #fff8f8; border-color: #E61932; z-index: 1; }
+    .rolo-item.soon-item:hover { background: #fffbf0; border-color: #f0a500; z-index: 1; }
+    .rolo-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .rolo-body { flex: 1; min-width: 0; }
+    .rolo-title { font-size: 14px; font-weight: 700; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rolo-sub { font-size: 12px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rolo-tag { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .rolo-cs { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #FFF8E6; color: #9A6200; border: 1px solid #F5D680; white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; gap: 4px; }
+    .rolo-arrow { color: #ddd; font-size: 16px; flex-shrink: 0; transition: color 0.12s; }
+    .rolo-item:hover .rolo-arrow { color: #E61932; }
+    .rolo-item.soon-item:hover .rolo-arrow { color: #f0a500; }
+
+    .rolo-expand { background: #fff8f8; border: 1.5px solid #E61932; border-top: none; padding: 1rem 1.2rem 1rem 70px; display: none; }
+    .rolo-expand.soon-expand { background: #fffbf0; border-color: #f0a500; }
+    .rolo-expand.open { display: block; animation: slideDown 0.2s ease; }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+    .rolo-expand p { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 12px; }
+    .rolo-expand a.expand-btn { display: inline-flex; align-items: center; gap: 5px; padding: 8px 18px; border-radius: 999px; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: background 0.12s; }
+    .rolo-expand a.live-link { background: #E61932; color: #fff; }
+    .rolo-expand a.live-link:hover { background: #c8152b; }
+    .rolo-expand a.soon-link { background: #f0a500; color: #fff; cursor: default; opacity: 0.7; pointer-events: none; }
+
+    .fade-in { animation: cardIn 0.22s ease both; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .empty { text-align: center; padding: 3rem 0; color: #bbb; font-size: 14px; grid-column: 1/-1; }
+    .footer-stripe { background: #1a1a1a; color: rgba(255,255,255,0.4); text-align: center; font-size: 11.5px; padding: 14px; letter-spacing: 0.3px; }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="bubble b1"></div><div class="bubble b2"></div><div class="bubble b3"></div>
+  <div class="hero-inner">
+    <div class="brand-row">
+      <div class="brand-badge">R</div>
+      <span class="brand-name">Reyes Coca-Cola Bottling &nbsp;·&nbsp; Human Resources</span>
+    </div>
+    <h1>HR Resource Library</h1>
+    <p class="hero-sub">Your one-stop shop for HR guides, toolkits, and booklets. Flip a card to explore — then open the resource with one click.</p>
+    <div class="stat-row" id="statRow"></div>
+  </div>
+</div>
+
+<div class="controls-wrap">
+  <div class="search-row">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="searchInput" placeholder="Search resources…" />
+    </div>
+    <div class="view-toggle">
+      <button class="vbtn active" id="btnGrid" title="Card view">⊞</button>
+      <button class="vbtn" id="btnList" title="List view">☰</button>
+    </div>
+  </div>
+  <div class="topic-bar" id="topicBar"></div>
+</div>
+
+<div class="main">
+  <div class="meta-row"><span class="count-line" id="countLine"></span></div>
+  <div id="cardGrid"></div>
+</div>
+
+<div class="footer-stripe">© Reyes Coca-Cola Bottling &nbsp;·&nbsp; Human Resources &nbsp;·&nbsp; Internal Use Only</div>
+
+<script>
+const topics = ["All","Policies & Compliance","Talent Management","Onboarding","Professional Development","Engagement & Recognition","Talent Acquisition"];
+
+const tagStyles = {
+  "Policies & Compliance":    { bg:"#EEF4FF", color:"#1A4FAD" },
+  "Talent Management":        { bg:"#F0FBF5", color:"#0A6640" },
+  "Onboarding":               { bg:"#FFF0F2", color:"#B8001F" },
+  "Professional Development": { bg:"#F3EEFF", color:"#4A2FA0" },
+  "Engagement & Recognition": { bg:"#FFF6EE", color:"#944200" },
+  "Talent Acquisition":       { bg:"#FBF0F8", color:"#7A1D6A" },
+};
+
+const icons = {
+  "Policies & Compliance":    "📋",
+  "Talent Management":        "📊",
+  "Onboarding":               "👋",
+  "Professional Development": "📈",
+  "Engagement & Recognition": "🏆",
+  "Talent Acquisition":       "🔍",
+};
+
+const books = [
+  { title:"I9 and ICE Inspections", topic:"Policies & Compliance", desc:"Guidance on I9 documentation and ICE inspection procedures.", url:null, status:"pending" },
+  { title:"Leaves / FMLA Training for HR", topic:"Policies & Compliance", desc:"Comprehensive training resource covering leave policies and FMLA requirements.", url:"https://heyzine.com/flip-book/RCCBLeavesToolkit", status:"live" },
+  { title:"Kronos Attendance Tracking (KAT)", topic:"Policies & Compliance", desc:"Attendance tracking guide for union employees. Deploying June/July 2026.", url:null, status:"pending" },
+  { title:"Reasonable Suspicion", topic:"Policies & Compliance", desc:"Training and reference guide for reasonable suspicion protocols.", url:"https://heyzine.com/flip-book/RCCBReasonableSuspicion", status:"live" },
+  { title:"Tax Credit Resources", topic:"Policies & Compliance", desc:"Resources related to available tax credit programs. Currently in development.", url:null, status:"pending" },
+  { title:"Performance Management Guide", topic:"Talent Management", desc:"End-to-end guide for managing employee performance and development conversations.", url:"https://heyzine.com/flip-book/RCCBPerformanceGuide", status:"live" },
+  { title:"Onboarding Guide", topic:"Onboarding", desc:"Everything a new hire needs for a smooth and successful start at RCCB.", url:"https://heyzine.com/flip-book/baa9b97ca3.html#page/1", status:"live" },
+  { title:"YRJ People Leader Page", topic:"Professional Development", desc:"Learning and development hub for people leaders across the Reyes organization.", url:"https://reyesholdings.sharepoint.com/teams/DEMOYRJ/SitePages/LearningTeamHome11.aspx", status:"live" },
+  { title:"YRJ Frontline Training", topic:"Professional Development", desc:"Frontline employee training materials and resources.", url:"https://heyzine.com/flip-book/e57d4c81e3.html#page/1", status:"live" },
+  { title:"HR Excellence Competency Model", topic:"Professional Development", desc:"Framework defining the core competencies for HR excellence at Reyes.", url:"https://heyzine.com/flip-book/ReyesExcellencemodel.html", status:"live" },
+  { title:"Employee Career & Development Guide", topic:"Professional Development", desc:"Career pathing guide helping RCCB employees plan and grow their careers.", url:"https://heyzine.com/flip-book/RCCBEmployeeDevelopmentGuide#page/1", status:"live" },
+  { title:"Development Plan Workbook", topic:"Professional Development", desc:"Interactive workbook for building individual development plans.", url:"https://heyzine.com/flip-book/72c6c722b1.html", status:"live" },
+  { title:"Career Connect Curriculum Guidebook", topic:"Professional Development", desc:"Curriculum guide for the Career Connect development program.", url:"https://heyzine.com/flip-book/CareerconnectCurriculum#page/1", status:"live" },
+  { title:"Mentoring Tool", topic:"Professional Development", desc:"Structured tool for establishing and managing mentoring relationships.", url:"https://heyzine.com/flip-book/RCCBMentoringTool", status:"live" },
+  { title:"Accelerate Resources", topic:"Professional Development", desc:"Resources for the Accelerate leadership development program. In development.", url:null, status:"pending" },
+  { title:"Merchandiser Career Roadmap", topic:"Professional Development", desc:"Career progression roadmap for Merchandiser roles at RCCB.", url:"https://heyzine.com/flip-book/MerchandiserCareerRoadmap", status:"live" },
+  { title:"Production Career Roadmap", topic:"Professional Development", desc:"Career progression roadmap for Production roles. Final version coming soon.", url:null, status:"pending" },
+  { title:"Transportation Career Roadmap", topic:"Professional Development", desc:"Career progression roadmap for Transportation roles. Final version coming soon.", url:null, status:"pending" },
+  { title:"Warehouse Career Roadmap", topic:"Professional Development", desc:"Career progression roadmap for Warehouse roles. Final version coming soon.", url:null, status:"pending" },
+  { title:"Mandatory Compliance Training", topic:"Professional Development", desc:"Required compliance training materials available in SharePoint documents.", url:"#REPLACE_WITH_SHAREPOINT_DOCS_LINK", status:"live" },
+  { title:"Recognition Toolkit", topic:"Engagement & Recognition", desc:"Manager's guide to building a meaningful recognition culture at RCCB.", url:"https://heyzine.com/flip-book/RCCBRecognitionToolkit", status:"live" },
+  { title:"Service Awards", topic:"Engagement & Recognition", desc:"Resources and materials for the RCCB employee service awards program.", url:"https://reyesholdings.sharepoint.com/:f:/s/rc-rccb/IgCM8wvj79hORq_3b2vMcO-0AWu-N6psGZkce_sylCGINNo?e=LfDlJA", status:"live" },
+  { title:"RCCB Awards (GPTW, Fortune, Brandon Hall)", topic:"Engagement & Recognition", desc:"Showcase of RCCB's award recognitions. Resource currently in development.", url:null, status:"pending" },
+  { title:"Internal Interview Guide", topic:"Talent Acquisition", desc:"Step-by-step guide for conducting structured internal interviews.", url:"https://heyzine.com/flip-book/1dea1e4827.html#page/1", status:"live" },
+  { title:"Build Your Own Interview Guide", topic:"Talent Acquisition", desc:"Customizable interview guide template for hiring managers.", url:"https://acrobat.adobe.com/id/urn:aaid:sc:US:80f61a10-90c6-426f-8fa9-e069289d1e2f", status:"live" },
+  { title:"Military Hiring Toolkit", topic:"Talent Acquisition", desc:"Resources and best practices for recruiting military talent.", url:"https://heyzine.com/flip-book/RCCBMilitary", status:"live" },
+  { title:"Campus Recruitment Toolkit", topic:"Talent Acquisition", desc:"Toolkit for campus recruiting events, outreach, and hiring programs.", url:"https://heyzine.com/flip-book/RCCBcampustoolkit", status:"live" },
+  { title:"Career Fair Checklist", topic:"Talent Acquisition", desc:"Complete checklist and prep guide for career fair events.", url:"https://reyesholdings.sharepoint.com/teams/RecruitmentResources/Shared%20Documents/Forms/AllItems.aspx?id=%2Fteams%2FRecruitmentResources%2FShared%20Documents%2FGeneral%2FCareer%20Fair%20Resources%2FCareer%20Fair%20Checklist%20%28Rev%202025%29%2Epdf&parent=%2Fteams%2FRecruitmentResources%2FShared%20Documents%2FGeneral%2FCareer%20Fair%20Resources", status:"live" },
+];
+
+let activeTopic = "All";
+let searchQuery = "";
+let viewMode = "grid";
+
+function getFiltered() {
+  return books.filter(b => {
+    const matchTopic = activeTopic === "All" || b.topic === activeTopic;
+    const matchSearch = !searchQuery || b.title.toLowerCase().includes(searchQuery) || b.desc.toLowerCase().includes(searchQuery) || b.topic.toLowerCase().includes(searchQuery);
+    return matchTopic && matchSearch;
+  });
+}
+
+function buildStats() {
+  const live = books.filter(b => b.status === "live").length;
+  const pending = books.filter(b => b.status === "pending").length;
+  document.getElementById("statRow").innerHTML = `
+    <div class="stat-pill"><span class="stat-dot"></span>${books.length} Total Resources</div>
+    <div class="stat-pill"><span class="stat-dot"></span>${live} Available Now</div>
+    <div class="stat-pill"><span class="stat-dot" style="background:#ffd97a"></span>${pending} Coming Soon</div>`;
+}
+
+function renderGrid(filtered) {
+  const grid = document.getElementById("cardGrid");
+  grid.className = "grid";
+  if (!filtered.length) { grid.innerHTML = '<p class="empty">No resources found.</p>'; return; }
+  grid.innerHTML = "";
+  filtered.forEach((b, i) => {
+    const ts = tagStyles[b.topic] || { bg:"#eee", color:"#333" };
+    const ico = icons[b.topic] || "📄";
+    const isLive = b.status === "live";
+    const wrap = document.createElement("div");
+    wrap.className = "flip-wrap fade-in" + (isLive ? "" : " coming-soon");
+    wrap.style.animationDelay = (i * 0.04) + "s";
+
+    const frontBottom = isLive
+      ? `<div class="flip-hint">↩ Click to flip</div>`
+      : `<div class="coming-soon-badge"><span class="cs-dot"></span>Coming Soon</div>`;
+
+    const backClass = isLive ? "live-back" : "soon-back";
+    const backLabel = isLive ? "HR Resource" : "In Development";
+    const backDesc = isLive
+      ? `${b.desc} Click "Open" to launch the full resource.`
+      : `${b.desc} This resource is currently being developed and will be available soon.`;
+    const actionBtn = isLive
+      ? `<a class="btn-open red-btn" href="${b.url}" target="_blank">Open resource →</a>`
+      : `<button class="btn-open amber-btn" disabled style="opacity:0.7;cursor:default;">Coming soon</button>`;
+
+    wrap.innerHTML = `
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="front-top">
+            <div class="book-icon-wrap" style="background:${ts.bg}">${ico}</div>
+            <span class="front-tag" style="background:${ts.bg};color:${ts.color}">${b.topic}</span>
+          </div>
+          <div class="front-title">${b.title}</div>
+          <div class="front-desc">${b.desc}</div>
+          ${frontBottom}
+        </div>
+        <div class="flip-back ${backClass}">
+          <div class="back-label">${backLabel}</div>
+          <div class="back-title">${b.title}</div>
+          <div class="back-desc">${backDesc}</div>
+          <div class="back-actions">
+            ${actionBtn}
+            <button class="btn-back">↩ Back</button>
+          </div>
+        </div>
+      </div>`;
+    wrap.querySelector(".flip-front").addEventListener("click", () => wrap.classList.toggle("flipped"));
+    wrap.querySelector(".btn-back").addEventListener("click", e => { e.stopPropagation(); wrap.classList.remove("flipped"); });
+    grid.appendChild(wrap);
+  });
+}
+
+function renderList(filtered) {
+  const grid = document.getElementById("cardGrid");
+  grid.className = "rolodex";
+  if (!filtered.length) { grid.innerHTML = '<p class="empty">No resources found.</p>'; return; }
+  grid.innerHTML = "";
+  filtered.forEach((b, i) => {
+    const ts = tagStyles[b.topic] || { bg:"#eee", color:"#333" };
+    const ico = icons[b.topic] || "📄";
+    const isLive = b.status === "live";
+
+    const item = document.createElement("div");
+    item.className = "rolo-item fade-in" + (isLive ? "" : " soon-item");
+    item.style.animationDelay = (i * 0.03) + "s";
+
+    const tagHtml = isLive
+      ? `<span class="rolo-tag" style="background:${ts.bg};color:${ts.color}">${b.topic}</span>`
+      : `<span class="rolo-cs"><span class="cs-dot"></span>Coming Soon</span>`;
+
+    item.innerHTML = `
+      <div class="rolo-icon" style="background:${ts.bg}">${ico}</div>
+      <div class="rolo-body">
+        <div class="rolo-title">${b.title}</div>
+        <div class="rolo-sub">${b.topic}</div>
+      </div>
+      ${tagHtml}
+      <span class="rolo-arrow">›</span>`;
+
+    const expand = document.createElement("div");
+    expand.className = "rolo-expand" + (isLive ? "" : " soon-expand");
+
+    const expandBtn = isLive
+      ? `<a class="expand-btn live-link" href="${b.url}" target="_blank">Open resource →</a>`
+      : `<a class="expand-btn soon-link" href="#">Coming soon</a>`;
+
+    expand.innerHTML = `<p>${b.desc}</p>${expandBtn}`;
+
+    item.addEventListener("click", () => {
+      const isOpen = expand.classList.contains("open");
+      document.querySelectorAll(".rolo-expand.open").forEach(e => e.classList.remove("open"));
+      document.querySelectorAll(".rolo-arrow").forEach(a => a.textContent = "›");
+      if (!isOpen) {
+        expand.classList.add("open");
+        item.querySelector(".rolo-arrow").textContent = "⌄";
+      }
+    });
+
+    grid.appendChild(item);
+    grid.appendChild(expand);
+  });
+}
+
+function render() {
+  const filtered = getFiltered();
+  const live = filtered.filter(b => b.status === "live").length;
+  const pending = filtered.filter(b => b.status === "pending").length;
+  let meta = filtered.length + " resource" + (filtered.length !== 1 ? "s" : "");
+  if (activeTopic !== "All") meta += " in " + activeTopic;
+  if (pending > 0) meta += " · " + pending + " coming soon";
+  document.getElementById("countLine").textContent = meta;
+  if (viewMode === "grid") renderGrid(filtered);
+  else renderList(filtered);
+}
+
+function buildChips() {
+  const bar = document.getElementById("topicBar");
+  topics.forEach(t => {
+    const chip = document.createElement("button");
+    chip.className = "chip" + (t === activeTopic ? " active" : "");
+    chip.textContent = t;
+    chip.addEventListener("click", () => {
+      activeTopic = t;
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      render();
+    });
+    bar.appendChild(chip);
+  });
+}
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  searchQuery = e.target.value.trim().toLowerCase();
+  render();
+});
+document.getElementById("btnGrid").addEventListener("click", () => {
+  viewMode = "grid";
+  document.getElementById("btnGrid").classList.add("active");
+  document.getElementById("btnList").classList.remove("active");
+  render();
+});
+document.getElementById("btnList").addEventListener("click", () => {
+  viewMode = "list";
+  document.getElementById("btnList").classList.add("active");
+  document.getElementById("btnGrid").classList.remove("active");
+  render();
+});
+
+buildStats();
+buildChips();
+render();
+</script>
+</body>
+</html>
