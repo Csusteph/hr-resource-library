@@ -248,92 +248,222 @@
       gap: 20px;
     }
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      transition: all 0.3s;
+    /* ========== FLIP CARD STYLES ========== */
+    .flip-wrap {
+      perspective: 900px;
+      height: 230px;
       cursor: pointer;
+    }
+
+    .flip-inner {
       position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.45, 0.05, 0.25, 1);
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    .flip-wrap.flipped .flip-inner {
+      transform: rotateY(180deg);
     }
 
-    .card-accent {
+    .flip-front,
+    .flip-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .flip-front {
+      background: #fff;
+      border: 1.5px solid #e5e5e5;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      transition: border-color 0.13s, box-shadow 0.13s;
+    }
+
+    .flip-wrap:hover .flip-front {
+      box-shadow: 0 8px 28px rgba(244, 0, 9, 0.12);
+    }
+
+    .flip-wrap.coming-soon:hover .flip-front {
+      border-color: #f0a500;
+      box-shadow: 0 8px 28px rgba(240, 165, 0, 0.10);
+    }
+
+    .flip-back {
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+    }
+
+    .front-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      gap: 6px;
+    }
+
+    .book-icon-wrap {
+      width: 48px;
+      height: 56px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .front-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .front-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .front-desc {
+      font-size: 11.5px;
+      color: #666666;
+      line-height: 1.5;
+      flex: 1;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .flip-hint {
+      margin-top: auto;
+      padding-top: 8px;
+      font-size: 11px;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .coming-soon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FCD34D;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      margin-top: auto;
+      width: fit-content;
+    }
+
+    .cs-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #D97706;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    .color-bar {
       position: absolute;
       left: 0;
       top: 0;
       bottom: 0;
       width: 5px;
+      border-radius: 14px 0 0 14px;
     }
 
-    .card-content {
-      padding: 24px;
-      padding-left: 28px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .card-icon {
-      font-size: 32px;
-    }
-
-    .card-tag {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .card-title {
-      font-size: 16px;
+    .back-label {
+      font-size: 10px;
       font-weight: 700;
-      color: #1a1a1a;
+      letter-spacing: 1.2px;
+      color: rgba(255, 255, 255, 0.6);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .back-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
       margin-bottom: 8px;
     }
 
-    .card-desc {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.5;
-      margin-bottom: 16px;
+    .back-desc {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      flex: 1;
     }
 
-    .card-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
+    .back-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-open {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 12.5px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: center;
       text-decoration: none;
-      transition: all 0.2s;
-      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background 0.12s, opacity 0.12s;
     }
 
-    .card-btn.live {
-      background: #E31837;
-      color: white;
+    .btn-open:hover {
+      opacity: 0.9;
     }
 
-    .card-btn.live:hover {
-      background: #c41530;
+    .btn-open.amber-btn {
+      color: #7a5200;
     }
 
-    .card-btn.pending {
-      background: #FEF3C7;
-      color: #92400E;
-      cursor: not-allowed;
+    .btn-back {
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.12s;
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.25);
     }
 
     /* Footer */
@@ -344,24 +474,25 @@
       font-size: 13px;
     }
 
-    /* Category Colors */
-    .cat-policies { background: #DBEAFE; color: #1E40AF; }
-    .cat-policies-accent { background: #2563EB; }
-    .cat-talent-mgmt { background: #D1FAE5; color: #065F46; }
-    .cat-talent-mgmt-accent { background: #059669; }
-    .cat-onboarding { background: #FEE2E2; color: #991B1B; }
-    .cat-onboarding-accent { background: #DC2626; }
-    .cat-professional { background: #EDE9FE; color: #5B21B6; }
-    .cat-professional-accent { background: #7C3AED; }
-    .cat-engagement { background: #FEF3C7; color: #92400E; }
-    .cat-engagement-accent { background: #D97706; }
-    .cat-acquisition { background: #FCE7F3; color: #9D174D; }
-    .cat-acquisition-accent { background: #DB2777; }
-
     /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeInUp 0.22s ease both;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
     @keyframes ping {
@@ -371,18 +502,9 @@
       }
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-4px); }
-    }
-
-    .card {
-      animation: fadeIn 0.4s ease-out forwards;
     }
 
     /* AI Bot Styles */
@@ -550,11 +672,6 @@
       color: #888;
       text-transform: uppercase;
       letter-spacing: 1px;
-      transition: opacity 0.3s;
-    }
-
-    .ai-bot-container:hover .ai-bot-label {
-      opacity: 1;
     }
 
     /* Modal Styles */
@@ -581,7 +698,7 @@
       border-radius: 16px;
       width: 90%;
       max-width: 700px;
-      max-height: 85vh;
+      max-height: 90vh;
       overflow: hidden;
       transform: scale(0.95);
       transition: transform 0.3s;
@@ -647,7 +764,7 @@
     }
 
     .modal-body {
-      height: 500px;
+      height: 600px;
     }
 
     .modal-body iframe {
@@ -698,7 +815,7 @@
       <div class="hero-row">
         <div class="hero-text">
           <h1>HR SearchBar</h1>
-          <p>Your one-stop shop for HR guides, toolkits, and booklets. Click a card to explore — then open the resource with one click.</p>
+          <p>Your one-stop shop for HR guides, toolkits, and booklets. Flip a card to explore — then open the resource with one click.</p>
         </div>
         <div class="stats">
           <div class="stat-card">
@@ -750,7 +867,6 @@
 
   <!-- AI Assistant Bot -->
   <div class="ai-bot-container">
-    <!-- Tooltip -->
     <div class="ai-bot-tooltip">
       <div class="ai-bot-tooltip-header">
         <div class="ai-bot-tooltip-icon">🤖</div>
@@ -761,14 +877,10 @@
       </div>
       <div class="ai-bot-tooltip-content">
         <p>Need help finding a resource or have an HR question? Chat with our AI assistant!</p>
-        <div class="ai-bot-tooltip-cta">
-          💬 Click to start chatting →
-        </div>
+        <div class="ai-bot-tooltip-cta">💬 Click to start chatting →</div>
       </div>
       <div class="ai-bot-tooltip-arrow"></div>
     </div>
-
-    <!-- Bot Button -->
     <button class="ai-bot-button" onclick="openAIChat()">
       <div class="ai-bot-ping"></div>
       <div class="ai-bot-ring"></div>
@@ -778,7 +890,7 @@
     <div class="ai-bot-label">Ask AI</div>
   </div>
 
-  <!-- Request Resource Modal -->
+  <!-- Request Resource Modal with Microsoft Form -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -789,10 +901,10 @@
             <p>Submit your request via the form below</p>
           </div>
         </div>
-        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <button class="modal-close" onclick="closeModal()">×</button>
       </div>
       <div class="modal-body">
-        https://reyesholdings.sharepoint.com/:l:/t/ta-rccb/JADuG5xfI83MQ6Hg3I6HKwomAdO9WFgS4KJadiDGa5Y7wQM?nav=YWQ4MDBjYjEtNDMxYi00ZTE4LWIwOTQtOGRiNjNlYTU2NDJk
+        https://forms.cloud.microsoft/r/vCewsNTEWv
       </div>
     </div>
   </div>
@@ -839,13 +951,13 @@
       "Talent Acquisition": "🔍",
     };
 
-    const categoryClasses = {
-      "Policies & Compliance": { tag: "cat-policies", accent: "cat-policies-accent" },
-      "Talent Management": { tag: "cat-talent-mgmt", accent: "cat-talent-mgmt-accent" },
-      "Onboarding": { tag: "cat-onboarding", accent: "cat-onboarding-accent" },
-      "Professional Development": { tag: "cat-professional", accent: "cat-professional-accent" },
-      "Engagement & Recognition": { tag: "cat-engagement", accent: "cat-engagement-accent" },
-      "Talent Acquisition": { tag: "cat-acquisition", accent: "cat-acquisition-accent" },
+    const tagStyles = {
+      "Policies & Compliance": { bg: "#DBEAFE", color: "#1E40AF", accent: "#2563EB" },
+      "Talent Management": { bg: "#D1FAE5", color: "#065F46", accent: "#059669" },
+      "Onboarding": { bg: "#FEE2E2", color: "#991B1B", accent: "#DC2626" },
+      "Professional Development": { bg: "#EDE9FE", color: "#5B21B6", accent: "#7C3AED" },
+      "Engagement & Recognition": { bg: "#FEF3C7", color: "#92400E", accent: "#D97706" },
+      "Talent Acquisition": { bg: "#FCE7F3", color: "#9D174D", accent: "#DB2777" },
     };
 
     let currentFilter = "All";
@@ -871,27 +983,58 @@
       document.getElementById('resultsCount').textContent = filtered.length;
 
       grid.innerHTML = filtered.map((resource, index) => {
-        const catClass = categoryClasses[resource.topic] || { tag: '', accent: '' };
+        const style = tagStyles[resource.topic] || { bg: '#eee', color: '#333', accent: '#666' };
         const icon = topicIcons[resource.topic] || '📄';
+        const isLive = resource.status === 'live';
         
         return `
-          <div class="card" style="animation-delay: ${index * 0.05}s">
-            <div class="card-accent ${catClass.accent}"></div>
-            <div class="card-content">
-              <div class="card-header">
-                <span class="card-icon">${icon}</span>
-                <span class="card-tag ${catClass.tag}">${resource.topic}</span>
+          <div class="flip-wrap fade-in ${!isLive ? 'coming-soon' : ''}" style="animation-delay: ${index * 0.04}s" data-id="${resource.id}">
+            <div class="flip-inner">
+              <!-- FRONT -->
+              <div class="flip-front" onclick="flipCard(${resource.id})">
+                <div class="color-bar" style="background-color: ${style.accent}"></div>
+                <div class="front-top" style="padding-left: 8px;">
+                  <div class="book-icon-wrap" style="background: ${style.bg}">${icon}</div>
+                  <span class="front-tag" style="background: ${style.bg}; color: ${style.color}">${resource.topic}</span>
+                </div>
+                <div class="front-title" style="padding-left: 8px;">${resource.title}</div>
+                <div class="front-desc" style="padding-left: 8px;">${resource.desc}</div>
+                ${isLive ? 
+                  `<div class="flip-hint" style="padding-left: 8px;">↩ Click to flip</div>` :
+                  `<div class="coming-soon-badge" style="margin-left: 8px;"><span class="cs-dot"></span>Coming Soon</div>`
+                }
               </div>
-              <h3 class="card-title">${resource.title}</h3>
-              <p class="card-desc">${resource.desc}</p>
-              ${resource.status === 'live' && resource.url ? 
-                `<a href="${resource.url}" target="_blank" class="card-btn live">Open Resource →</a>` :
-                `<span class="card-btn pending">⏳ Coming Soon</span>`
-              }
+              <!-- BACK -->
+              <div class="flip-back" style="background-color: ${isLive ? style.accent : '#7a5200'}">
+                <div class="back-label">${isLive ? 'HR Resource' : 'In Development'}</div>
+                <div class="back-title">${resource.title}</div>
+                <div class="back-desc">${resource.desc} ${isLive ? 'Click "Open" to launch the full resource.' : 'This resource is currently being developed and will be available soon.'}</div>
+                <div class="back-actions">
+                  ${isLive ? 
+                    `<a href="${resource.url || '#'}" target="_blank" class="btn-open" style="color: ${style.accent}" onclick="event.stopPropagation()">Open resource →</a>` :
+                    `<button class="btn-open amber-btn" disabled style="opacity: 0.7; cursor: default;">Coming soon</button>`
+                  }
+                  <button class="btn-back" onclick="event.stopPropagation(); unflipCard(${resource.id})">↩ Back</button>
+                </div>
+              </div>
             </div>
           </div>
         `;
       }).join('');
+    }
+
+    function flipCard(id) {
+      const card = document.querySelector(`.flip-wrap[data-id="${id}"]`);
+      if (card) {
+        card.classList.add('flipped');
+      }
+    }
+
+    function unflipCard(id) {
+      const card = document.querySelector(`.flip-wrap[data-id="${id}"]`);
+      if (card) {
+        card.classList.remove('flipped');
+      }
     }
 
     // Search
