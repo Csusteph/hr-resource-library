@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR SearchBar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #E31837, #F40009, #E31837);
+    }
+
+    .header-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      background: #E31837;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .brand-divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .brand-text h2 {
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .brand-text p {
+      color: rgba(255,255,255,0.6);
+      font-size: 12px;
+    }
+
+    .request-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #E31837;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .request-btn:hover {
+      background: #c41530;
+      transform: translateY(-1px);
+    }
+
+    .hero-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .hero-text h1 {
+      color: white;
+      font-size: 42px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      letter-spacing: -1px;
+    }
+
+    .hero-text p {
+      color: rgba(255,255,255,0.7);
+      font-size: 15px;
+      max-width: 480px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      min-width: 110px;
+      text-align: center;
+    }
+
+    .stat-icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .stat-number {
+      color: white;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .stat-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Main Content */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Search and Filters */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      border: 2px solid #e5e5e5;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: all 0.2s;
+      background: white;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #E31837;
+      box-shadow: 0 0 0 3px rgba(227, 24, 55, 0.1);
+    }
+
+    .search-box::before {
+      content: '🔍';
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      padding: 8px 16px;
+      border: 2px solid #e5e5e5;
+      border-radius: 20px;
+      background: white;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-chip:hover {
+      border-color: #ccc;
+    }
+
+    .filter-chip.active {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+      color: white;
+    }
+
+    .results-count {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+
+    .card-accent {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+    }
+
+    .card-content {
+      padding: 24px;
+      padding-left: 28px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      font-size: 32px;
+    }
+
+    .card-tag {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .card-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .card-status.live {
+      color: #059669;
+    }
+
+    .card-status.pending {
+      color: #D97706;
+    }
+
+    .card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .card-btn.live {
+      background: #E31837;
+      color: white;
+    }
+
+    .card-btn.live:hover {
+      background: #c41530;
+    }
+
+    .card-btn.pending {
+      background: #FEF3C7;
+      color: #92400E;
+      cursor: not-allowed;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: #999;
+      font-size: 13px;
+    }
+
+    /* Category Colors */
+    .cat-policies { background: #DBEAFE; color: #1E40AF; }
+    .cat-policies-accent { background: #2563EB; }
+    .cat-talent-mgmt { background: #D1FAE5; color: #065F46; }
+    .cat-talent-mgmt-accent { background: #059669; }
+    .cat-onboarding { background: #FEE2E2; color: #991B1B; }
+    .cat-onboarding-accent { background: #DC2626; }
+    .cat-professional { background: #EDE9FE; color: #5B21B6; }
+    .cat-professional-accent { background: #7C3AED; }
+    .cat-engagement { background: #FEF3C7; color: #92400E; }
+    .cat-engagement-accent { background: #D97706; }
+    .cat-acquisition { background: #FCE7F3; color: #9D174D; }
+    .cat-acquisition-accent { background: #DB2777; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .stats {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .hero-text h1 {
+        font-size: 32px;
+      }
+      .brand-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="brand-row">
+        <div class="brand">
+          <div class="brand-logo">R</div>
+          <div class="brand-divider"></div>
+          <div class="brand-text">
+            <h2>Reyes Coca-Cola Bottling</h2>
+            <p>Human Resources</p>
+          </div>
+        </div>
+        https://reyesholdings.sharepoint.com/:l:/t/ta-rccb/JADuG5xfI83MQ6Hg3I6HKwomAdO9WFgS4KJadiDGa5Y7wQM?nav=YWQ4MDBjYjEtNDMxYi00ZTE4LWIwOTQtOGRiNjNlYTU2NDJk
+      </div>
+      <div class="hero-row">
+        <div class="hero-text">
+          <h1>HR SearchBar</h1>
+          <p>Your one-stop shop for HR guides, toolkits, and booklets. Click a card to explore — then open the resource with one click.</p>
+        </div>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-number" id="totalCount">28</div>
+            <div class="stat-label">Resources</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-number" id="liveCount">20</div>
+            <div class="stat-label">Available</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-number" id="pendingCount">8</div>
+            <div class="stat-label">Coming Soon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search resources...">
+      </div>
+      <div class="filters" id="filters">
+        <button class="filter-chip active" data-filter="All">All</button>
+        <button class="filter-chip" data-filter="Policies & Compliance">📋 Policies</button>
+        <button class="filter-chip" data-filter="Talent Management">📊 Talent Mgmt</button>
+        <button class="filter-chip" data-filter="Onboarding">👋 Onboarding</button>
+        <button class="filter-chip" data-filter="Professional Development">📈 Development</button>
+        <button class="filter-chip" data-filter="Engagement & Recognition">🏆 Recognition</button>
+        <button class="filter-chip" data-filter="Talent Acquisition">🔍 Acquisition</button>
+      </div>
+    </div>
+
+    <p class="results-count"><span id="resultsCount">28</span> resources found</p>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    © 2025 Reyes Coca-Cola Bottling. All rights reserved.
+  </footer>
+
+  <script>
+    // HR Resources Data
+    const hrResources = [
+      { id: 1, title: "I9 and ICE Inspections", topic: "Policies & Compliance", desc: "Guidance on I9 documentation and ICE inspection procedures.", url: null, status: "pending" },
+      { id: 2, title: "Leaves / FMLA Training for HR", topic: "Policies & Compliance", desc: "Comprehensive training resource covering leave policies and FMLA requirements.", url: "https://heyzine.com/flip-book/RCCBLeavesToolkit", status: "live" },
+      { id: 3, title: "Kronos Attendance Tracking (KAT)", topic: "Policies & Compliance", desc: "Attendance tracking guide for union employees. Deploying June/July 2026.", url: null, status: "pending" },
+      { id: 4, title: "Reasonable Suspicion", topic: "Policies & Compliance", desc: "Training and reference guide for reasonable suspicion protocols.", url: "https://heyzine.com/flip-book/RCCBReasonableSuspicion", status: "live" },
+      { id: 5, title: "Tax Credit Resources", topic: "Policies & Compliance", desc: "Resources related to available tax credit programs. Currently in development.", url: null, status: "pending" },
+      { id: 6, title: "Performance Management Guide", topic: "Talent Management", desc: "End-to-end guide for managing employee performance and development conversations.", url: "https://heyzine.com/flip-book/RCCBPerformanceGuide", status: "live" },
+      { id: 7, title: "Onboarding Guide", topic: "Onboarding", desc: "Everything a new hire needs for a smooth and successful start at RCCB.", url: "https://heyzine.com/flip-book/baa9b97ca3.html#page/1", status: "live" },
+      { id: 8, title: "YRJ People Leader Page", topic: "Professional Development", desc: "Learning and development hub for people leaders across the Reyes organization.", url: "https://reyesholdings.sharepoint.com/teams/DEMOYRJ/SitePages/LearningTeamHome11.aspx", status: "live" },
+      { id: 9, title: "YRJ Frontline Training", topic: "Professional Development", desc: "Frontline employee training materials and resources.", url: "https://heyzine.com/flip-book/e57d4c81e3.html#page/1", status: "live" },
+      { id: 10, title: "HR Excellence Competency Model", topic: "Professional Development", desc: "Framework defining the core competencies for HR excellence at Reyes.", url: "https://heyzine.com/flip-book/ReyesExcellencemodel.html", status: "live" },
+      { id: 11, title: "Employee Career & Development Guide", topic: "Professional Development", desc: "Career pathing guide helping RCCB employees plan and grow their careers.", url: "https://heyzine.com/flip-book/RCCBEmployeeDevelopmentGuide#page/1", status: "live" },
+      { id: 12, title: "Development Plan Workbook", topic: "Professional Development", desc: "Interactive workbook for building individual development plans.", url: "https://heyzine.com/flip-book/72c6c722b1.html", status: "live" },
+      { id: 13, title: "Career Connect Curriculum Guidebook", topic: "Professional Development", desc: "Curriculum guide for the Career Connect development program.", url: "https://heyzine.com/flip-book/CareerconnectCurriculum#page/1", status: "live" },
+      { id: 14, title: "Mentoring Tool", topic: "Professional Development", desc: "Structured tool for establishing and managing mentoring relationships.", url: "https://heyzine.com/flip-book/RCCBMentoringTool", status: "live" },
+      { id: 15, title: "Accelerate Resources", topic: "Professional Development", desc: "Resources for the Accelerate leadership development program. In development.", url: null, status: "pending" },
+      { id: 16, title: "Merchandiser Career Roadmap", topic: "Professional Development", desc: "Career progression roadmap for Merchandiser roles at RCCB.", url: "https://heyzine.com/flip-book/MerchandiserCareerRoadmap", status: "live" },
+      { id: 17, title: "Production Career Roadmap", topic: "Professional Development", desc: "Career progression roadmap for Production roles. Final version coming soon.", url: null, status: "pending" },
+      { id: 18, title: "Transportation Career Roadmap", topic: "Professional Development", desc: "Career progression roadmap for Transportation roles. Final version coming soon.", url: null, status: "pending" },
+      { id: 19, title: "Warehouse Career Roadmap", topic: "Professional Development", desc: "Career progression roadmap for Warehouse roles. Final version coming soon.", url: null, status: "pending" },
+      { id: 20, title: "Mandatory Compliance Training", topic: "Professional Development", desc: "Required compliance training materials available in SharePoint documents.", url: "#", status: "live" },
+      { id: 21, title: "Recognition Toolkit", topic: "Engagement & Recognition", desc: "Manager's guide to building a meaningful recognition culture at RCCB.", url: "https://heyzine.com/flip-book/RCCBRecognitionToolkit", status: "live" },
+      { id: 22, title: "Service Awards", topic: "Engagement & Recognition", desc: "Resources and materials for the RCCB employee service awards program.", url: "https://reyesholdings.sharepoint.com/:f:/s/rc-rccb/IgCM8wvj79hORq_3b2vMcO-0AWu-N6psGZkce_sylCGINNo?e=LfDlJA", status: "live" },
+      { id: 23, title: "RCCB Awards (GPTW, Fortune, Brandon Hall)", topic: "Engagement & Recognition", desc: "Showcase of RCCB's award recognitions. Resource currently in development.", url: null, status: "pending" },
+      { id: 24, title: "Internal Interview Guide", topic: "Talent Acquisition", desc: "Step-by-step guide for conducting structured internal interviews.", url: "https://heyzine.com/flip-book/1dea1e4827.html#page/1", status: "live" },
+      { id: 25, title: "Build Your Own Interview Guide", topic: "Talent Acquisition", desc: "Customizable interview guide template for hiring managers.", url: "https://acrobat.adobe.com/id/urn:aaid:sc:US:80f61a10-90c6-426f-8fa9-e069289d1e2f", status: "live" },
+      { id: 26, title: "Military Hiring Toolkit", topic: "Talent Acquisition", desc: "Resources and best practices for recruiting military talent.", url: "https://heyzine.com/flip-book/RCCBMilitary", status: "live" },
+      { id: 27, title: "Campus Recruitment Toolkit", topic: "Talent Acquisition", desc: "Toolkit for campus recruiting events, outreach, and hiring programs.", url: "https://heyzine.com/flip-book/RCCBcampustoolkit", status: "live" },
+      { id: 28, title: "Career Fair Checklist", topic: "Talent Acquisition", desc: "Complete checklist and prep guide for career fair events.", url: "https://reyesholdings.sharepoint.com/teams/RecruitmentResources/Shared%20Documents/Forms/AllItems.aspx?id=%2Fteams%2FRecruitmentResources%2FShared%20Documents%2FGeneral%2FCareer%20Fair%20Resources%2FCareer%20Fair%20Checklist%20%28Rev%202025%29%2Epdf&parent=%2Fteams%2FRecruitmentResources%2FShared%20Documents%2FGeneral%2FCareer%20Fair%20Resources", status: "live" },
+    ];
+
+    const topicIcons = {
+      "Policies & Compliance": "📋",
+      "Talent Management": "📊",
+      "Onboarding": "👋",
+      "Professional Development": "📈",
+      "Engagement & Recognition": "🏆",
+      "Talent Acquisition": "🔍",
+    };
+
+    const categoryClasses = {
+      "Policies & Compliance": { tag: "cat-policies", accent: "cat-policies-accent" },
+      "Talent Management": { tag: "cat-talent-mgmt", accent: "cat-talent-mgmt-accent" },
+      "Onboarding": { tag: "cat-onboarding", accent: "cat-onboarding-accent" },
+      "Professional Development": { tag: "cat-professional", accent: "cat-professional-accent" },
+      "Engagement & Recognition": { tag: "cat-engagement", accent: "cat-engagement-accent" },
+      "Talent Acquisition": { tag: "cat-acquisition", accent: "cat-acquisition-accent" },
+    };
+
+    let currentFilter = "All";
+    let searchQuery = "";
+
+    function renderCards() {
+      const grid = document.getElementById('cardsGrid');
+      let filtered = hrResources;
+
+      if (currentFilter !== "All") {
+        filtered = filtered.filter(r => r.topic === currentFilter);
+      }
+
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(r => 
+          r.title.toLowerCase().includes(q) || 
+          r.desc.toLowerCase().includes(q) ||
+          r.topic.toLowerCase().includes(q)
+        );
+      }
+
+      document.getElementById('resultsCount').textContent = filtered.length;
+
+      grid.innerHTML = filtered.map((resource, index) => {
+        const catClass = categoryClasses[resource.topic] || { tag: '', accent: '' };
+        const icon = topicIcons[resource.topic] || '📄';
+        
+        return `
+          <div class="card" style="animation-delay: ${index * 0.05}s">
+            <div class="card-accent ${catClass.accent}"></div>
+            <div class="card-content">
+              <div class="card-header">
+                <span class="card-icon">${icon}</span>
+                <span class="card-tag ${catClass.tag}">${resource.topic}</span>
+              </div>
+              <h3 class="card-title">${resource.title}</h3>
+              <p class="card-desc">${resource.desc}</p>
+              ${resource.status === 'live' && resource.url ? 
+                `<a href="${resource.url}" target="_blank" class="card-btn live">Open Resource →</a>` :
+                `<span class="card-btn pending">⏳ Coming Soon</span>`
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      renderCards();
+    });
+
+    // Filters
+    document.getElementById('filters').addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-chip')) {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        renderCards();
+      }
+    });
+
+    // Initial render
+    renderCards();
+
+    // Update counts
+    document.getElementById('totalCount').textContent = hrResources.length;
+    document.getElementById('liveCount').textContent = hrResources.filter(r => r.status === 'live').length;
+    document.getElementById('pendingCount').textContent = hrResources.filter(r => r.status === 'pending').length;
+  </script>
+
+</body>
+</html>
